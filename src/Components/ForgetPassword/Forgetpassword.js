@@ -1,15 +1,17 @@
 import React, { useState } from 'react'
 import { Modal, Button } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import './Forget.css'
 
 function Forgetpassword() {
 
     const [email, setEmail] = useState("")
+    const navigate = useNavigate()
 
     const submit = (e) => {
         e.preventDefault()
-        console.log("Sent successfully = ", email)
+        alert(`Your account is ${email}`)
+        navigate("/login")
     }
 
     return (

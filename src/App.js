@@ -1,6 +1,6 @@
 
 import './App.css';
-import { Routes, Route, useNavigate } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import UserDashBord from './Components/UserDashBoard/UserDashBord';
 import LoginPage from './Components/LoginPage/LoginPage';
 import Home from './Components/Home/Home';
@@ -11,48 +11,40 @@ import Profile from './Components/Profile/Profile';
 import { useEffect, useState } from 'react';
 
 function App() {
+  const [isLogin, setIsLogin] = useState(null)
 
-  // console.log("localStorage=", localStorage.getItem("Token"))
+  useEffect(()=>{
+    const checkLogin = localStorage.getItem("isLogin")
+    checkLogin && JSON.parse(checkLogin) ? setIsLogin(true):setIsLogin(false)
+  },[])
 
-  const [isLogin, setIsLogin] = useState(false)
-  const navigate = useNavigate()
   useEffect(() => {
-    checkToken()
+    localStorage.setItem("isLogin",isLogin)
   }, [isLogin])
 
-  const token = localStorage.getItem("Token")
-  const checkToken = () =>{
-    (token !== null)?setIsLogin(true):setIsLogin(false)
-    console.log("isLogin=",isLogin)
-      // {(isLogin === true)? navigate("/user/dashbord"):navigate("/userlogin")}
-    if(isLogin === true)
-    {
-      navigate("/user/dashbord")
-    }
-    else
-    {
-      navigate("/userlogin")
-    }
-  }
-  
-  const logOut = (e) =>{
-    setIsLogin(e)
-  }
-  const userLogin = (e)=>{
-    setIsLogin(e)
-  }
-  
 
   return (
     <div className="App">
       <Routes>
-        
-        <Route exact path="/userlogin" element={<LoginPage Login={isLogin} userLogin={userLogin} />} />
-        <Route exact path="/user/dashbord" element={<UserDashBord isLogin={isLogin} logOut={logOut} />} />
-        <Route exact path="/" element={<Home />} />
-        <Route exact path="/user/register" element={<Register />} />
-        <Route exact path="user/forgetpassword" element={<Forgetpassword />} />
-        <Route exact path="user/dashbord/profile" element={<Profile />} />
+        {
+          !isLogin && (
+            <>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<LoginPage Authenticate={() => setIsLogin(true)} />} />
+              <Route path="/register" element={<Register />} />
+              <Route exact path="/forgetpassword" element={<Forgetpassword />} />
+            </>
+          )
+        }
+        {isLogin && (
+          <>
+            <Route path="/dashboard" element={<UserDashBord logOut={() => setIsLogin(false)} />} />
+            <Route path="/profile" element={<Profile />} />
+          </>
+        )
+        }
+        <Route path="*" element={<Navigate to={isLogin ? "/dashboard" : "/login"} />} />
+
       </Routes>
 
     </div>

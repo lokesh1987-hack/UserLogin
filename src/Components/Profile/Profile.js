@@ -1,12 +1,21 @@
 import React from 'react'
+import Nav from '../Nav'
 import UserDashBord from '../UserDashBoard/UserDashBord'
 
 function Profile() {
+
+
+
     return (
         <div>
-            <UserDashBord />
-            <div className="container shadow border">
-                <h1 className="mt-5">Lokesh harode</h1>
+            <Nav />
+            <div className="container mt-4 p-3" >
+                <h1 className="p-1">Profile</h1>
+                <hr/>
+                <div className="">
+                    
+                </div>
+
             </div>
         </div>
     )
